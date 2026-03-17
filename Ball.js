@@ -9,6 +9,7 @@ class Ball {
         this.last = 0;
         this.shadows = []
         this.maxShadows = maxShadows
+        this.value = 32
     }
 
     applyGravity() {
@@ -58,6 +59,26 @@ class Ball {
         });
     }
 
+    checkZoneEnter(zones) {
+        zones.forEach(zone => {
+
+            if (this.x < zone.x + zone.width && this.x > zone.x) {
+                if (this.y < zone.y + zone.height && this.y > zone.y) {
+                    console.log("enter");
+
+                    this.x = zone.getNewPose().x;
+                    this.y = zone.getNewPose().y;
+
+                    this.velX = 0;
+                    this.velY = 0;
+
+                    this.value *= zone.multiplicator
+                }
+            }
+
+        })
+    }
+
     move() {
         this.x += this.velX;
         this.y += this.velY;
@@ -73,6 +94,12 @@ class Ball {
             this.shadows = this.shadows.slice(-10);
         }
         this.shadows.push({ x: this.x, y: this.y })
+    }
+
+    drawValue() {
+        ctx.fillStyle = 'black';
+        ctx.font = '20px Arial';
+        ctx.fillText(this.value, this.x, this.y);
     }
 
     drawShadow() {
